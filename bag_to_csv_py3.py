@@ -12,12 +12,12 @@ Notes: flag_camera_parsing =1 if you want to parse camera topics into csv.
 
 '''
 
-import rosbag, sys, csv #pip3 install bagpy
+import rosbag, sys, csv
 import time
 import string
 import os #for file management make directory
 import shutil #for file management, copy file
-import velodyne_decoder as vd #pip install velodyne-decoder
+import velodyne_decoder as vd
 import numpy as np
 import hashlib
 from parseCamera import parseCamera
@@ -86,34 +86,24 @@ for bagFile in listOfBagFiles:
 			listOfTopics.append(topic)
 	PC = parseCamera(folder,bag)
 	if flag_camera_parsing == 1:
-		if '/rear_left_camera/image_rect_color/compressed' in listOfTopics:
-			time_start = time.time()
-			rear_left_image_topic = '/rear_left_camera/image_rect_color/compressed'
+		if '/rear_left_camera/image_color/compressed' in listOfTopics:
+			rear_left_image_topic = '/rear_left_camera/image_color/compressed'
 			OutputFileName = folder + '/' + rear_left_image_topic.replace('/', '_slash_') + '.txt'
 			PC.parseCamera(rear_left_image_topic, OutputFileName)
 			listOfTopics.remove(rear_left_image_topic)
-			time_end = time.time()
-			time_elpased = time_end - time_start
 			print("'rear_left_camera' has been parsed.")
-			print("Elpased time is " + str(time_elpased))
-		if '/rear_center_camera/image_rect_color/compressed' in listOfTopics:
-			time_start = time.time()
-			rear_center_image_topic = '/rear_center_camera/image_rect_color/compressed'
+		if '/rear_center_camera/image_color/compressed' in listOfTopics:
+			rear_center_image_topic = '/rear_center_camera/image_color/compressed'
 			OutputFileName = folder + '/' + rear_center_image_topic.replace('/', '_slash_') + '.txt'
 			PC.parseCamera(rear_center_image_topic, OutputFileName)
 			listOfTopics.remove(rear_center_image_topic)
 			print("'rear_center_camera' has been parsed.")
-			time_end = time.time()
-			time_elpased = time_end - time_start
-		if '/rear_right_camera/image_rect_color/compressed' in listOfTopics:
-			time_start = time.time()
-			rear_right_image_topic = '/rear_right_camera/image_rect_color/compressed'
+		if '/rear_right_camera/image_color/compressed' in listOfTopics:
+			rear_right_image_topic = '/rear_right_camera/image_color/compressed'
 			OutputFileName = folder + '/' + rear_right_image_topic.replace('/', '_slash_') + '.txt'
 			PC.parseCamera(rear_right_image_topic, OutputFileName)
 			listOfTopics.remove(rear_right_image_topic)
 			print("'rear_right_camera' has been parsed.")
-			time_end = time.time()
-			time_elpased = time_end - time_start
 		if '/front_left_camera/image_color/compressed' in listOfTopics:
 			front_left_image_topic = '/front_left_camera/image_color/compressed'
 			OutputFileName = folder + '/' + front_left_image_topic.replace('/', '_slash_') + '.txt'
@@ -132,17 +122,7 @@ for bagFile in listOfBagFiles:
 			PC.parseCamera(front_right_image_topic, OutputFileName)
 			listOfTopics.remove(front_right_image_topic)
 			print("'front_right_camera' has been parsed.")
-
-		if '/rear_left_camera/image_rect_color' in listOfTopics:
-			listOfTopics.remove('/rear_left_camera/image_rect_color')
-			print("'rear_left_camera' will not be parsed.")
-		if '/rear_center_camera/image_rect_color' in listOfTopics:
-			listOfTopics.remove('/rear_center_camera/image_rect_color')
-			print("'rear_center_camera' will not be parsed.")
-		if '/rear_right_camera/image_rect_color' in listOfTopics:
-			listOfTopics.remove('/rear_right_camera/image_rect_color')
-			print("'rear_right_camera' will not be parsed.")
-
+	else:
 		if '/rear_left_camera/image_color/compressed' in listOfTopics:
 			listOfTopics.remove('/rear_left_camera/image_color/compressed')
 			print("'rear_left_camera' will not be parsed.")
@@ -152,24 +132,14 @@ for bagFile in listOfBagFiles:
 		if '/rear_right_camera/image_color/compressed' in listOfTopics:
 			listOfTopics.remove('/rear_right_camera/image_color/compressed')
 			print("'rear_right_camera' will not be parsed.")
-	else:
-		if '/rear_left_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/rear_left_camera/image_rect_color/compressed')
-			print("'rear_left_camera' will not be parsed.")
-		if '/rear_center_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/rear_center_camera/image_rect_color/compressed')
-			print("'rear_center_camera' will not be parsed.")
-		if '/rear_right_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/rear_right_camera/image_rect_color/compressed')
-			print("'rear_right_camera' will not be parsed.")
-		if '/front_left_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/front_left_camera/image_rect_color/compressed')
+		if '/front_left_camera/image_color/compressed' in listOfTopics:
+			listOfTopics.remove('/front_left_camera/image_color/compressed')
 			print("'front_left_camera' will not be parsed.")
-		if '/front_center_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/front_center_camera/image_rect_color/compressed')
+		if '/front_center_camera/image_color/compressed' in listOfTopics:
+			listOfTopics.remove('/front_center_camera/image_color/compressed')
 			print("'front_center_camera' will not be parsed.")
-		if '/front_right_camera/image_rect_color/compressed' in listOfTopics:
-			listOfTopics.remove('/front_right_camera/image_rect_color/compressed')
+		if '/front_right_camera/image_color/compressed' in listOfTopics:
+			listOfTopics.remove('/front_right_camera/image_color/compressed')
 			print("'front_right_camera' will not be parsed.")
 
 
@@ -221,36 +191,6 @@ for bagFile in listOfBagFiles:
 					File.write('\n')
 
 				File.close()
-			elif topicName == '/velodyne_points':
-				OutputFileName = folder + '/' + topicName.replace('/', '_slash_') + '.txt'
-				File = open(OutputFileName,"w")
-				VelodyneInfoFile = folder +'/'+'velodyne_info.txt'
-				InfoFile = open(VelodyneInfoFile,'w')
-				for topic, msg, t in bag.read_messages(topicName):
-
-					InfoFile.write(', '.join(map(str,msg.fields))) # This removes the leading and lagging parenthese from this message
-					InfoFile.write('\n')
-					File.write(str(msg.header.seq))
-					File.write(',')
-					File.write(str(msg.header.stamp.secs))
-					File.write(',')
-					File.write(str(msg.header.stamp.nsecs))
-					File.write(',')
-					File.write(str(msg.height))
-					File.write(',')
-					File.write(str(msg.width))
-					File.write(',')
-					File.write(str(msg.is_bigendian))
-					File.write(',')
-					File.write(str(msg.point_step))
-					File.write(',')
-					File.write(str(msg.row_step))
-					File.write(',')
-					File.write(str(msg.is_dense))
-					File.write('\n')
-
-				File.close()
-				InfoFile.close()
 
 			elif topicName == '/velodyne_packets':
 				count = 0
