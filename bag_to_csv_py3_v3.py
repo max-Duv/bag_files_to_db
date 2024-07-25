@@ -44,7 +44,7 @@ for bagFile in listOfBagFiles:
             if topic in listOfTopics:
                 OutputFileName = folder + '/' + topic.replace('/', '_slash_') + '.txt'
                 PC.parseCamera(topic, OutputFileName)
-                listOfTopics.remove(topic)
+
                 print(f"{topic} has been parsed.")
 
     else:
